@@ -6,18 +6,22 @@ from math import sqrt
 from sys import argv
 
 MAX_MUTATIONS = 10
-NUM_CITIES = 23
-NUM_CHILDREN = 1000
+NUM_CITIES = 10
+NUM_CHILDREN = 10000
 
 class TSP:
     def __init__(self) -> None:
-        if len(argv) > 1:
-            np.random.seed(int(argv[1]))
-        else:
-            np.random.seed(NUM_CITIES)
         self._graph = nx.DiGraph()
-        for c in range(NUM_CITIES):
-            self._graph.add_node(c, pos=(np.random.random(), np.random.random()))
+        self._graph.add_node(0, pos=(0.0, 0.0))
+        self._graph.add_node(1, pos=(201.4, -625.6))
+        self._graph.add_node(2, pos=(678.5, 434.7))
+        self._graph.add_node(3, pos=(-962.4, 616.3))
+        self._graph.add_node(4, pos=(-788.5, 572.2))
+        self._graph.add_node(5, pos=(-100.0, -641.0))
+        self._graph.add_node(6, pos=(774.9, 944.7))
+        self._graph.add_node(7, pos=(1.7, 106.1))
+        self._graph.add_node(8, pos=(2.3, -470.3))
+        self._graph.add_node(9, pos=(-969.9, -445.3))
 
 
     def get_pairs(self, sequence):
@@ -66,7 +70,7 @@ class TSP:
 
 
     def get_distance(self, node1, node2):
-        return round( 1_000_000 / NUM_CITIES *
+        return round( #1_000_000 / NUM_CITIES *
             sqrt(pow(node1[0] - node2[0], 2) + pow(node1[1] - node2[1], 2))
         )
 
@@ -86,13 +90,13 @@ class TSP:
         for c in range(NUM_CHILDREN):
             mutated_solution = self.swap_mutate(parent_solution, gen_n)
             cost = self.evaluate_solution(mutated_solution)
-            print(f"Mutated solution n° {c}: \n\t{mutated_solution}\nCost: {round(cost,2)}\n")
+            #print(f"Mutated solution n° {c}: \n\t{mutated_solution}\nCost: {round(cost,2)}\n")
             if cost <= current_cost:
                 best_so_far = mutated_solution.copy()
                 current_cost = cost
-                print(f"Current best cost: {current_cost} from {best_so_far}")
+                #print(f"Current best cost: {current_cost} from {best_so_far}")
 
-        print(f"Final best cost: {current_cost} from {best_so_far}")
+        #print(f"Final best cost: {current_cost} from {best_so_far}")
 
         return best_so_far
 
@@ -111,10 +115,10 @@ def main():
     problem = TSP()
     initial_solution = list(range(NUM_CITIES))
     final_solution = problem.evolve_solution(initial_solution, 0)
-    problem.plot_solution(initial_solution)
     print(f"Initial path cost: {problem.evaluate_solution(initial_solution):,}")
-    problem.plot_solution(final_solution)
     print(f"Final path cost:{problem.evaluate_solution(final_solution):,}")
+    problem.plot_solution(final_solution)
+    
 
 
 if __name__ == '__main__':
